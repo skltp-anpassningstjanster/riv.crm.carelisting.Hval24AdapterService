@@ -8,7 +8,7 @@
         <artifactId>soitoolkit-default-parent</artifactId>
         <version>0.6.1</version>
     </parent>
-    
+
     <groupId>se.skltp.adapterservices.crm.carelisting</groupId>
     <artifactId>Hval24AdapterIC-parent</artifactId>
     <version>2.0.3-SNAPSHOT</version>
@@ -16,9 +16,10 @@
     <name>${project.artifactId}</name>
 
 	<scm>
-		<connection>http://skltpservices.googlecode.com/svn/AdapterServices/riv.crm.carelisting/Hval24AdapterService/trunk</connection>
-		<developerConnection>scm:svn:https://skltpservices.googlecode.com/svn/AdapterServices/riv.crm.carelisting/Hval24AdapterService/trunk</developerConnection>
-		<url>http://skltpservices.googlecode.com/svn/AdapterServices/riv.crm.carelisting/Hval24AdapterService/trunk</url>
+		<url>https://github.com/skltp-anpassningstjanster/riv.crm.carelisting.Hval24AdapterService</url>
+		<connection>scm:git:git://github.com/skltp-anpassningstjanster/riv.crm.carelisting.Hval24AdapterService.git</connection>
+		<developerConnection>scm:git:git://github.com/skltp-anpassningstjanster/riv.crm.carelisting.Hval24AdapterService.git</developerConnection>
+		<tag>HEAD</tag>
 	</scm>
 
 	<modules>
@@ -27,7 +28,7 @@
     	<module>Hval24AdapterIC-tests</module>
     </modules>
 
-	<dependencies>	
+	<dependencies>
 		<dependency>
 		  <groupId>org.soitoolkit.commons.components</groupId>
 			<artifactId>soitoolkit-commons-mule</artifactId>
@@ -47,11 +48,26 @@
 			<artifactId>soitoolkit-mule-3.3.1-dependencies</artifactId>
 			<version>${soitoolkit.version}</version>
 			<type>pom</type>
-		</dependency>		
+		</dependency>
 	</dependencies>
 
     <build>
-		<plugins>   
+			<pluginManagement>
+				<plugins>
+					<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-release-plugin</artifactId>
+							<version>2.5.1</version>
+							<configuration>
+									<autoVersionSubmodules>true</autoVersionSubmodules>
+									<tagNameFormat>v@{project.version}</tagNameFormat>
+									<pushChanges>false</pushChanges>
+									<localCheckout>true</localCheckout>
+							</configuration>
+					</plugin>
+				</plugins>
+			</pluginManagement>
+			<plugins>
             <plugin>
                <groupId>com.mycila.maven-license-plugin</groupId>
         		<artifactId>maven-license-plugin</artifactId>
@@ -86,7 +102,7 @@
             </plugin>
       </plugins>
     </build>
-    
+
     <profiles>
     	<profile>
     		<id>license</id>
@@ -112,5 +128,5 @@
 			</build>
         </profile>
     </profiles>
-    
+
 </project>
