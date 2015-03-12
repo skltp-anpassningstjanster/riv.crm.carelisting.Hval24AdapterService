@@ -22,26 +22,25 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
+
+
 import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.namespace.QName;
 
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 import org.mule.transformer.AbstractMessageAwareTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.soitoolkit.commons.mule.jaxb.JaxbUtil;
 
 import se.skl.riv.crm.carelisting.v1.Facility;
 import se.skl.riv.crm.carelisting.v1.Listing;
@@ -52,6 +51,13 @@ import se.skltp.adapterservices.crm.carelisting.hval24adapter.hval.HvalCarelistR
 
 public class Hval2CarelistTransformer extends AbstractMessageAwareTransformer {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
+	private static final JaxbUtil JAXB_UTIL = new JaxbUtil(GetListingResponseType.class);
+	static {
+		 // Solves the problem that we dont want an extra xml element in
+		 // paylaod. <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+		JAXB_UTIL.addMarshallProperty(Marshaller.JAXB_FRAGMENT, true);
+	}
+
 
 	public Hval2CarelistTransformer() {
 		super();
@@ -99,20 +105,7 @@ public class Hval2CarelistTransformer extends AbstractMessageAwareTransformer {
 			GetListingResponseType response = createResponse(hvalResponse);
 
 			// Transform the JAXB object into a XML payload
-			StringWriter writer = new StringWriter();
-			Marshaller marshaller = JAXBContext.newInstance(
-					GetListingResponseType.class).createMarshaller();
-			
-			/*
-			 * Solves the problem that we dont want an extra xml element in
-			 * paylaod. <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-			 */
-			marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-
-			marshaller.marshal(new JAXBElement(new QName("urn:riv:crm:carelisting:GetListingResponder:1",
-					"getListingResponse"), GetListingResponseType.class, response), writer);
-
-			String result = writer.toString();
+			String result = JAXB_UTIL.marshal(response, "urn:riv:crm:carelisting:GetListingResponder:1", "getListingResponse");
 			logger.debug("Extracted information: {}", result);
 			return result;
 
