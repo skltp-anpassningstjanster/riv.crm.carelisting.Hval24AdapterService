@@ -1,0 +1,11 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:add="http://www.w3.org/2005/08/addressing" xmlns:urn="urn:riv:crm:carelisting:GetListingResponder:1">
+   <soapenv:Header>
+      <add:To>01</add:To>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn:getListing>
+         <urn:personId>19121212-1212</urn:personId>
+         <!--You may enter ANY elements at this point-->
+      </urn:getListing>
+   </soapenv:Body>
+</soapenv:Envelope>
